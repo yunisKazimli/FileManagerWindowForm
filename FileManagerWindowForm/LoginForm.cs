@@ -31,9 +31,9 @@ namespace FileManagerWindowForm
             AuthorizationManager.token = token;
             AuthorizationManager.gmail = GmailTextEdit.Text;
 
-            (new MainMenuForm()).Show();
-
             Hide();
+
+            (new MainMenuForm()).Show();
         }
 
         private void SignUpSimpleButton_Click(object sender, EventArgs e)

@@ -251,3 +251,7 @@ D:\Projects\VSprojects\FileManagerWindowForm\FileManagerWindowForm\obj\Debug\Fil
 D:\Projects\VSprojects\FileManagerWindowForm\FileManagerWindowForm\obj\Debug\FileManagerWindowForm.ShareFileForm.resources
 D:\Projects\VSprojects\FileManagerWindowForm\FileManagerWindowForm\obj\Debug\FileManagerWindowForm.DownloadFileForm.resources
 D:\Projects\VSprojects\FileManagerWindowForm\FileManagerWindowForm\obj\Debug\FileManagerWindowForm.DeleteFileForm.resources
+D:\Projects\VSprojects\FileManagerWindowForm\FileManagerWindowForm\bin\Debug\FileManagerWindowForm.exe.manifest
+D:\Projects\VSprojects\FileManagerWindowForm\FileManagerWindowForm\bin\Debug\FileManagerWindowForm.application
+D:\Projects\VSprojects\FileManagerWindowForm\FileManagerWindowForm\obj\Debug\FileManagerWindowForm.exe.manifest
+D:\Projects\VSprojects\FileManagerWindowForm\FileManagerWindowForm\obj\Debug\FileManagerWindowForm.application
