@@ -1,4 +1,5 @@
 ﻿using DevExpress.XtraEditors;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,27 +19,23 @@ namespace FileManagerWindowForm
             filePathTextEdit = _filePathTextEdit;
         }
 
-        public static bool CheckFileTexEdit()
+        public static void CheckFileTexEdit()
         {
-            if (filePathTextEdit.Text == "" || !File.Exists(filePathTextEdit.Text))
+            if (filePathTextEdit.Text == "")
             {
-                XtraMessageBox.Show("Wrong file path", "Wrong filling", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return false;
+                throw new Exception("Fill the fields/Wrong filling");
             }
 
-            return true;
+            if (!File.Exists(filePathTextEdit.Text))
+            {
+                throw new Exception("File not found/Wrong path");
+            }
         }
 
-        public static async Task<bool> AddFile()
+        public static async Task AddFile()
         {
             string fileName;
             string filePath;
-            string url;
-
-            HttpClient httpClient = HttpClientFactory.Create();
-
-            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", AuthorizationManager.token);
 
             DividePathToFileAndDirectory(filePathTextEdit.Text, out fileName, out filePath);
 
@@ -47,27 +44,20 @@ namespace FileManagerWindowForm
             parameters.AddParameter("fileName", fileName, false);
             parameters.AddParameter("filePath", filePath, false);
 
-            url = HttpGenerator.GenerateHttp("AddFile", parameters);
-
-            try
-            {
-                await httpClient.GetStringAsync(url);
-            }
-            catch (Exception e)
-            {
-                XtraMessageBox.Show(e.Message, "File adding error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return false;
-            }
-
-            return true;
+            await HttpGenerator.GenerateVoidHttp("AddFile", parameters);
         }
 
         private static void DividePathToFileAndDirectory(string fullPath, out string fileName, out string filePath)
         {
             int lastSlashIndex = 0;
 
-            for (int i = fullPath.Length - 1; i >= 0; i--) if (fullPath[i] == '\\') lastSlashIndex = i;
+            for (int i = fullPath.Length - 1; i >= 0; i--) if (fullPath[i] == '\\')
+            {
+                lastSlashIndex = i;
+
+                break;
+            } 
+                    
 
             fileName = fullPath.Substring(lastSlashIndex + 1, fullPath.Length - (lastSlashIndex + 1));
 

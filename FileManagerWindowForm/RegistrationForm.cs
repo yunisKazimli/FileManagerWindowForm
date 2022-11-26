@@ -22,9 +22,18 @@ namespace FileManagerWindowForm
 
         private async void SignUpSimpleButton_Click(object sender, EventArgs e)
         {
-            if (!RegistrationFormStaticHandler.CheckForSignUp()) return;
+            try
+            {
+                RegistrationFormStaticHandler.CheckForSignUp();
 
-            if ((await RegistrationFormStaticHandler.ValidateSignUp()) == "") return;
+                await RegistrationFormStaticHandler.ValidateSignUp();
+            }
+            catch(Exception exc)
+            {
+                XtraMessageBox.Show(exc.Message.Split('/')[0], exc.Message.Split('/').Length == 1 ? "Unexpected error" : exc.Message.Split('/')[1], System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+
+                return;
+            }
 
             DialogResult = DialogResult.OK;
         }

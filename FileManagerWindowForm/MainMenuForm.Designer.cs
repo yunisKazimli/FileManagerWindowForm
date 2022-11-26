@@ -32,7 +32,13 @@ namespace FileManagerWindowForm
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenuForm));
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
-            this.ExitSimpleButton = new DevExpress.XtraEditors.SimpleButton();
+            this.LoginMenuSimpleButton = new DevExpress.XtraEditors.SimpleButton();
+            this.FileShowPanelControl = new DevExpress.XtraEditors.PanelControl();
+            this.FileContainerPanelControl = new DevExpress.XtraEditors.PanelControl();
+            this.DeleteContainerFileSimpleButton = new DevExpress.XtraEditors.SimpleButton();
+            this.DownloadContainerFileSimpleButton = new DevExpress.XtraEditors.SimpleButton();
+            this.FilePathLabelControl = new DevExpress.XtraEditors.LabelControl();
+            this.FileNameLabelControl = new DevExpress.XtraEditors.LabelControl();
             this.DeleteSimpleButton = new DevExpress.XtraEditors.SimpleButton();
             this.RefreshSimpleButton = new DevExpress.XtraEditors.SimpleButton();
             this.ShareFileSimpleButton = new DevExpress.XtraEditors.SimpleButton();
@@ -44,6 +50,10 @@ namespace FileManagerWindowForm
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.FileShowPanelControl)).BeginInit();
+            this.FileShowPanelControl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.FileContainerPanelControl)).BeginInit();
+            this.FileContainerPanelControl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Root)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
             this.SuspendLayout();
@@ -61,7 +71,8 @@ namespace FileManagerWindowForm
             // 
             // panelControl1
             // 
-            this.panelControl1.Controls.Add(this.ExitSimpleButton);
+            this.panelControl1.Controls.Add(this.LoginMenuSimpleButton);
+            this.panelControl1.Controls.Add(this.FileShowPanelControl);
             this.panelControl1.Controls.Add(this.DeleteSimpleButton);
             this.panelControl1.Controls.Add(this.RefreshSimpleButton);
             this.panelControl1.Controls.Add(this.ShareFileSimpleButton);
@@ -72,15 +83,71 @@ namespace FileManagerWindowForm
             this.panelControl1.Size = new System.Drawing.Size(776, 426);
             this.panelControl1.TabIndex = 4;
             // 
-            // ExitSimpleButton
+            // LoginMenuSimpleButton
             // 
-            this.ExitSimpleButton.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("ExitSimpleButton.ImageOptions.Image")));
-            this.ExitSimpleButton.Location = new System.Drawing.Point(732, 5);
-            this.ExitSimpleButton.Name = "ExitSimpleButton";
-            this.ExitSimpleButton.Size = new System.Drawing.Size(39, 42);
-            this.ExitSimpleButton.TabIndex = 5;
-            this.ExitSimpleButton.Text = "Quit";
-            this.ExitSimpleButton.Click += new System.EventHandler(this.ExitSimpleButton_Click);
+            this.LoginMenuSimpleButton.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("LoginMenuSimpleButton.ImageOptions.Image")));
+            this.LoginMenuSimpleButton.Location = new System.Drawing.Point(660, 5);
+            this.LoginMenuSimpleButton.Name = "LoginMenuSimpleButton";
+            this.LoginMenuSimpleButton.Size = new System.Drawing.Size(105, 42);
+            this.LoginMenuSimpleButton.TabIndex = 1;
+            this.LoginMenuSimpleButton.Text = "Login menu";
+            this.LoginMenuSimpleButton.Click += new System.EventHandler(this.LoginMenuSimpleButton_Click);
+            // 
+            // FileShowPanelControl
+            // 
+            this.FileShowPanelControl.AllowTouchScroll = true;
+            this.FileShowPanelControl.Controls.Add(this.FileContainerPanelControl);
+            this.FileShowPanelControl.Location = new System.Drawing.Point(0, 53);
+            this.FileShowPanelControl.Name = "FileShowPanelControl";
+            this.FileShowPanelControl.Size = new System.Drawing.Size(770, 372);
+            this.FileShowPanelControl.TabIndex = 6;
+            // 
+            // FileContainerPanelControl
+            // 
+            this.FileContainerPanelControl.Controls.Add(this.DeleteContainerFileSimpleButton);
+            this.FileContainerPanelControl.Controls.Add(this.DownloadContainerFileSimpleButton);
+            this.FileContainerPanelControl.Controls.Add(this.FilePathLabelControl);
+            this.FileContainerPanelControl.Controls.Add(this.FileNameLabelControl);
+            this.FileContainerPanelControl.Location = new System.Drawing.Point(3, 0);
+            this.FileContainerPanelControl.Name = "FileContainerPanelControl";
+            this.FileContainerPanelControl.Size = new System.Drawing.Size(767, 53);
+            this.FileContainerPanelControl.TabIndex = 0;
+            // 
+            // DeleteContainerFileSimpleButton
+            // 
+            this.DeleteContainerFileSimpleButton.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("DeleteContainerFileSimpleButton.ImageOptions.Image")));
+            this.DeleteContainerFileSimpleButton.Location = new System.Drawing.Point(657, 6);
+            this.DeleteContainerFileSimpleButton.Name = "DeleteContainerFileSimpleButton";
+            this.DeleteContainerFileSimpleButton.Size = new System.Drawing.Size(105, 42);
+            this.DeleteContainerFileSimpleButton.TabIndex = 7;
+            this.DeleteContainerFileSimpleButton.Text = "Delete File";
+            this.DeleteContainerFileSimpleButton.Click += new System.EventHandler(this.DeleteContainerFileSimpleButton_Click);
+            // 
+            // DownloadContainerFileSimpleButton
+            // 
+            this.DownloadContainerFileSimpleButton.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("DownloadContainerFileSimpleButton.ImageOptions.Image")));
+            this.DownloadContainerFileSimpleButton.Location = new System.Drawing.Point(541, 6);
+            this.DownloadContainerFileSimpleButton.Name = "DownloadContainerFileSimpleButton";
+            this.DownloadContainerFileSimpleButton.Size = new System.Drawing.Size(110, 42);
+            this.DownloadContainerFileSimpleButton.TabIndex = 7;
+            this.DownloadContainerFileSimpleButton.Text = "Download File";
+            this.DownloadContainerFileSimpleButton.Click += new System.EventHandler(this.DownloadContainerFileSimpleButton_Click);
+            // 
+            // FilePathLabelControl
+            // 
+            this.FilePathLabelControl.Location = new System.Drawing.Point(5, 34);
+            this.FilePathLabelControl.Name = "FilePathLabelControl";
+            this.FilePathLabelControl.Size = new System.Drawing.Size(63, 13);
+            this.FilePathLabelControl.TabIndex = 1;
+            this.FilePathLabelControl.Text = "labelControl2";
+            // 
+            // FileNameLabelControl
+            // 
+            this.FileNameLabelControl.Location = new System.Drawing.Point(5, 5);
+            this.FileNameLabelControl.Name = "FileNameLabelControl";
+            this.FileNameLabelControl.Size = new System.Drawing.Size(98, 13);
+            this.FileNameLabelControl.TabIndex = 0;
+            this.FileNameLabelControl.Text = "AS@gmail.com\\a.txt";
             // 
             // DeleteSimpleButton
             // 
@@ -155,14 +222,19 @@ namespace FileManagerWindowForm
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.ControlBox = false;
             this.Controls.Add(this.layoutControl1);
             this.Name = "MainMenuForm";
             this.Text = "MainMenuForm";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainMenuForm_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.FileShowPanelControl)).EndInit();
+            this.FileShowPanelControl.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.FileContainerPanelControl)).EndInit();
+            this.FileContainerPanelControl.ResumeLayout(false);
+            this.FileContainerPanelControl.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Root)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
             this.ResumeLayout(false);
@@ -177,9 +249,15 @@ namespace FileManagerWindowForm
         private DevExpress.XtraEditors.SimpleButton AddFileSimpleButton;
         private DevExpress.XtraLayout.LayoutControlGroup Root;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem1;
-        private DevExpress.XtraEditors.SimpleButton ExitSimpleButton;
         private DevExpress.XtraEditors.SimpleButton DeleteSimpleButton;
         private DevExpress.XtraEditors.SimpleButton RefreshSimpleButton;
         private DevExpress.XtraEditors.SimpleButton ShareFileSimpleButton;
+        private DevExpress.XtraEditors.PanelControl FileShowPanelControl;
+        private DevExpress.XtraEditors.PanelControl FileContainerPanelControl;
+        private DevExpress.XtraEditors.SimpleButton DeleteContainerFileSimpleButton;
+        private DevExpress.XtraEditors.SimpleButton DownloadContainerFileSimpleButton;
+        private DevExpress.XtraEditors.LabelControl FilePathLabelControl;
+        private DevExpress.XtraEditors.LabelControl FileNameLabelControl;
+        private DevExpress.XtraEditors.SimpleButton LoginMenuSimpleButton;
     }
 }

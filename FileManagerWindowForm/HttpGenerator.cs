@@ -15,7 +15,47 @@ namespace FileManagerWindowForm
     {
         public static readonly string httpStart = "https://localhost:44313/";
 
-        public static string GenerateHttp(string funcName, UrlParameterContainer urlParamContainer)
+        public static async Task GenerateVoidHttp(string funcName, UrlParameterContainer urlParamContainer)
+        {
+            string url = GenerateUrl(funcName, urlParamContainer);
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", AuthorizationManager.token);
+
+                var response = await client.GetAsync(url);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    HttpResponseContainer httpResponseContainer = JsonConvert.DeserializeObject<HttpResponseContainer>(response.Content.ReadAsStringAsync().Result);
+                    throw new Exception(httpResponseContainer.detail + "/" + "Server error : " + httpResponseContainer.status);
+                }
+            }
+        }
+
+        public static async Task<string> GenerateJsonHttp(string funcName, UrlParameterContainer urlParamContainer)
+        {
+            string url = GenerateUrl(funcName, urlParamContainer);
+
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", AuthorizationManager.token);
+
+                var response = await client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    HttpResponseContainer httpResponseContainer = JsonConvert.DeserializeObject<HttpResponseContainer>(response.Content.ReadAsStringAsync().Result);
+                    throw new Exception(httpResponseContainer.detail + "/" + "Server error : " + httpResponseContainer.status);
+                }
+            }
+        }
+
+        private static string GenerateUrl(string funcName, UrlParameterContainer urlParamContainer)
         {
             string url = httpStart + funcName + "?";
 

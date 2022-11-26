@@ -23,54 +23,31 @@ namespace FileManagerWindowForm
             UpdateFileNameComboBoxEdit();
         }
 
-        public static async Task<bool> DownloadFile()
+        public static async Task DownloadFile()
         {
-            HttpClient httpClient = HttpClientFactory.Create();
-
-            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", AuthorizationManager.token);
-
             UrlParameterContainer parameters = new UrlParameterContainer();
 
             parameters.AddParameter("fromGmail", fileNameComboBoxEdit.Text.Split('\\')[0], false);
             parameters.AddParameter("fileName", fileNameComboBoxEdit.Text.Split('\\')[1], false);
             parameters.AddParameter("destPath", directoryPathtextEdit.Text, false);
 
-            string url = HttpGenerator.GenerateHttp("DownloadFile", parameters);
-
-            try
-            {
-                await httpClient.GetStringAsync(url);
-            }
-            catch (Exception e)
-            {
-                XtraMessageBox.Show(e.Message, "File downloading error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return false;
-            }
-
-            return true;
+            await HttpGenerator .GenerateVoidHttp("DownloadFile", parameters);
         }
 
-        public static bool CheckFileTexEdit()
+        public static void CheckFileTexEdit()
         {
             if (fileNameComboBoxEdit.Text == "")
             {
-                XtraMessageBox.Show("You must choose file", "Wrong filling", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return false;
+                throw new Exception("Fill the fields/Wrong filling");
             }
 
             if (directoryPathtextEdit.Text == "" || !Directory.Exists(directoryPathtextEdit.Text))
             {
-                XtraMessageBox.Show("Wrong directory path", "Wrong filling", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return false;
+                throw new Exception("Directory not found/Wrong path");
             }
-
-            return true;
         }
 
-        private static async void UpdateFileNameComboBoxEdit()
+        private static async Task UpdateFileNameComboBoxEdit()
         {
             List<string> allFilesName = CutFileName(await GetAllFilesName()); 
             
@@ -81,28 +58,9 @@ namespace FileManagerWindowForm
 
         private static async Task<List<string>> GetAllFilesName()
         {
-            List<string> allFiles;
-
-            HttpClient httpClient = HttpClientFactory.Create();
-
-            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", AuthorizationManager.token);
-
             UrlParameterContainer parameters = new UrlParameterContainer();
 
-            string url = HttpGenerator.GenerateHttp("GetAllAcceptedFiles", parameters);
-
-            try
-            {
-                allFiles = JsonConvert.DeserializeObject<List<string>>(await httpClient.GetStringAsync(url));
-            }
-            catch (Exception e)
-            {
-                XtraMessageBox.Show(e.Message, "Unexpected error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return null;
-            }
-
-            return allFiles;
+            return JsonConvert.DeserializeObject<List<string>>(await HttpGenerator.GenerateJsonHttp("GetAllAcceptedFiles", parameters));
         }
 
         private static List<string> CutFileName(List<string> allFiles)

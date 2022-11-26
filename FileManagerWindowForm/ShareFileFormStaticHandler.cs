@@ -14,30 +14,38 @@ namespace FileManagerWindowForm
         private static CheckedComboBoxEdit toGmailCheckedComboBoxEdit;
         private static CheckedComboBoxEdit filesCheckedComboBoxEdit;
 
-        public static void Init(CheckedComboBoxEdit _toGmailCheckedComboBoxEdit, CheckedComboBoxEdit _filesCheckedComboBoxEdit)
+        public static async void Init(CheckedComboBoxEdit _toGmailCheckedComboBoxEdit, CheckedComboBoxEdit _filesCheckedComboBoxEdit)
         {
             toGmailCheckedComboBoxEdit = _toGmailCheckedComboBoxEdit;
             filesCheckedComboBoxEdit = _filesCheckedComboBoxEdit;
 
-            UpdateComboBoxList();
+            await UpdateComboBoxList();
         }
 
-        public static bool CheckComboBoxes()
+        public static void CheckComboBoxes()
         {
             if (toGmailCheckedComboBoxEdit.Properties.Items.Where(x => x.CheckState == System.Windows.Forms.CheckState.Checked).Count() == 0 || filesCheckedComboBoxEdit.Properties.Items.Where(x => x.CheckState == System.Windows.Forms.CheckState.Checked).Count() == 0)
             {
-                XtraMessageBox.Show("choose at least one option", "Wrong filling", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return false;
+                throw new Exception("Fill the fields/Wrong filling");
             }
-
-            return true;
         }
 
-        private static async void UpdateComboBoxList()
+        private static async Task UpdateComboBoxList()
         {
-            List<string> gmailsList = await GetAllGmails();
-            List<string> acceptedFilesList = CutFileName(await GetAllAcceptedFiles());
+            List<string> gmailsList;
+            List<string> acceptedFilesList;
+
+            try
+            {
+                gmailsList = await GetAllGmails();
+                acceptedFilesList = CutFileName(await GetAllAcceptedFiles());
+            }
+            catch(Exception e)
+            {
+                XtraMessageBox.Show(e.Message.Split('/')[0], e.Message.Split('/').Length == 1 ? "Unexpected error" : e.Message.Split('/')[1], System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+
+                return;
+            }
 
             toGmailCheckedComboBoxEdit.Properties.Items.Clear();
             filesCheckedComboBoxEdit.Properties.Items.Clear();
@@ -48,54 +56,16 @@ namespace FileManagerWindowForm
 
         private static async Task<List<string>> GetAllGmails()
         {
-            List<string> allGmails;
-
-            HttpClient httpClient = HttpClientFactory.Create();
-
-            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", AuthorizationManager.token);
-            
             UrlParameterContainer parameters = new UrlParameterContainer();
 
-            string url = HttpGenerator.GenerateHttp("GetAllGmails", parameters);
-
-            try
-            {
-                allGmails = JsonConvert.DeserializeObject<List<string>>(await httpClient.GetStringAsync(url));
-            }
-            catch (Exception e)
-            {
-                XtraMessageBox.Show(e.Message, "Unexpected error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return null;
-            }
-
-            return allGmails;
+            return JsonConvert.DeserializeObject<List<string>>(await HttpGenerator.GenerateJsonHttp("GetAllGmails", parameters));
         }
 
         private static async Task<List<string>> GetAllAcceptedFiles()
         {
-            List<string> allFiles;
-
-            HttpClient httpClient = HttpClientFactory.Create();
-
-            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", AuthorizationManager.token);
-            
             UrlParameterContainer parameters = new UrlParameterContainer();
 
-            string url = HttpGenerator.GenerateHttp("GetAllAcceptedFiles", parameters);
-
-            try
-            {
-                allFiles = (JsonConvert.DeserializeObject<List<string>>(await httpClient.GetStringAsync(url))).Where(x => x.IndexOf(AuthorizationManager.gmail) != -1).ToList();//find all path where only own gmail folder
-            }
-            catch (Exception e)
-            {
-                XtraMessageBox.Show(e.Message, "Unexpected error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return null;
-            }
-
-            return allFiles;
+            return (JsonConvert.DeserializeObject<List<string>>(await HttpGenerator.GenerateJsonHttp("GetAllAcceptedFiles", parameters))).Where(x => x.IndexOf(AuthorizationManager.gmail) != -1).ToList();//find all path where only own gmail folder
         }
         
         private static List<string> CutFileName(List<string> allFiles)
@@ -108,33 +78,14 @@ namespace FileManagerWindowForm
             return allFiles;
         }
 
-        public static async Task<bool> ShareFile()
+        public static async Task ShareFile()
         {
-            HttpClient httpClient = HttpClientFactory.Create();
-
-            string url;
-
-            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", AuthorizationManager.token);
-
             UrlParameterContainer cont = new UrlParameterContainer();
 
             cont.AddParameter("toGmails", GetAllCheckedItemsAsStringList(toGmailCheckedComboBoxEdit), true);
             cont.AddParameter("filesName", GetAllCheckedItemsAsStringList(filesCheckedComboBoxEdit), true);
 
-            url = HttpGenerator.GenerateHttp("ShareFile", cont);
-
-            try
-            {
-                await httpClient.GetStringAsync(url);
-            }
-            catch (Exception e)
-            {
-                XtraMessageBox.Show(e.Message, "File sharing error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return false;
-            }
-
-            return true;
+            await HttpGenerator.GenerateVoidHttp("ShareFile", cont);
         }
 
         public static List<string> GetAllCheckedItemsAsStringList(CheckedComboBoxEdit checkedComboBoxEdit)

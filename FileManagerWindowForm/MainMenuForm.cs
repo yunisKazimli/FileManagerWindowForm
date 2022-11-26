@@ -23,11 +23,6 @@ namespace FileManagerWindowForm
             (new AddFileForm()).ShowDialog();
         }
 
-        private void ExitSimpleButton_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
         private void ShareFileSimpleButton_Click(object sender, EventArgs e)
         {
             (new ShareFileForm()).ShowDialog();
@@ -41,6 +36,26 @@ namespace FileManagerWindowForm
         private void DeleteSimpleButton_Click(object sender, EventArgs e)
         {
             (new DeleteFileForm()).ShowDialog();
+        }
+
+        private void DownloadContainerFileSimpleButton_Click(object sender, EventArgs e)
+        {
+            (new DownloadFileForm((sender as SimpleButton).Parent.Controls.OfType<LabelControl>().FirstOrDefault(x => x.Name == "FileNameLabelControl").Text)).ShowDialog();
+        }
+
+        private void DeleteContainerFileSimpleButton_Click(object sender, EventArgs e)
+        {
+            (new DeleteFileForm((sender as SimpleButton).Parent.Controls.OfType<LabelControl>().FirstOrDefault(x => x.Name == "FileNameLabelControl").Text)).ShowDialog();
+        }
+
+        private void MainMenuForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void LoginMenuSimpleButton_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
         }
     }
 }

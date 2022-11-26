@@ -20,48 +20,25 @@ namespace FileManagerWindowForm
             UpdateFileNameComboBox();
         }
 
-        public static async Task<bool> DeleteFile()
+        public static async Task DeleteFile()
         {
-            string url;
-
-            HttpClient httpClient = HttpClientFactory.Create();
-
-            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", AuthorizationManager.token);
-
             UrlParameterContainer parameters = new UrlParameterContainer();
 
             parameters.AddParameter("fileName", fileNameComboBoxEdit.Text.Split('\\')[1], false);
             parameters.AddParameter("isPersonal", fileNameComboBoxEdit.Text.Split('\\')[0] == AuthorizationManager.gmail ? "true" : "false", false);
 
-            url = HttpGenerator.GenerateHttp("DeleteFile", parameters);
-
-            try
-            {
-                await httpClient.GetStringAsync(url);
-            }
-            catch (Exception e)
-            {
-                XtraMessageBox.Show(e.Message, "File deleting error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return false;
-            }
-
-            return true;
+            await HttpGenerator.GenerateVoidHttp("DeleteFile", parameters);
         }
 
-        public static bool CheckfileNameComboBoxEdit()
+        public static void CheckfileNameComboBoxEdit()
         {
             if (fileNameComboBoxEdit.Text == "")
             {
-                XtraMessageBox.Show("You must choose file name", "Wrong filling", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return false;
+                throw new Exception("Fill the fields/Wrong filling");
             }
-
-            return true;
         }
 
-        private static async void UpdateFileNameComboBox()
+        private static async Task UpdateFileNameComboBox()
         {
             List<string> allFilesName = CutFileName(await GetAllFilesName());
 
@@ -72,28 +49,9 @@ namespace FileManagerWindowForm
 
         private static async Task<List<string>> GetAllFilesName()
         {
-            List<string> allFiles;
-
-            HttpClient httpClient = HttpClientFactory.Create();
-
-            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", AuthorizationManager.token);
-
             UrlParameterContainer parameters = new UrlParameterContainer();
 
-            string url = HttpGenerator.GenerateHttp("GetAllAcceptedFiles", parameters);
-
-            try
-            {
-                allFiles = JsonConvert.DeserializeObject<List<string>>(await httpClient.GetStringAsync(url));
-            }
-            catch (Exception e)
-            {
-                XtraMessageBox.Show(e.Message, "Unexpected error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return null;
-            }
-
-            return allFiles;
+            return JsonConvert.DeserializeObject<List<string>>(await HttpGenerator.GenerateJsonHttp("GetAllAcceptedFiles", parameters));
         }
 
         private static List<string> CutFileName(List<string> allFiles)

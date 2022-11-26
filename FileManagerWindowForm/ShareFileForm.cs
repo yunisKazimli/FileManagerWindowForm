@@ -22,9 +22,20 @@ namespace FileManagerWindowForm
 
         private async void ShareFileSimpleButton_Click(object sender, EventArgs e)
         {
-            ShareFileFormStaticHandler.CheckComboBoxes();
+            try
+            {
+                ShareFileFormStaticHandler.CheckComboBoxes();
 
-            if (await ShareFileFormStaticHandler.ShareFile()) DialogResult = DialogResult.OK;
+                await ShareFileFormStaticHandler.ShareFile();
+            }
+            catch(Exception exc)
+            {
+                XtraMessageBox.Show(exc.Message.Split('/')[0], exc.Message.Split('/').Length == 1 ? "Unexpected error" : exc.Message.Split('/')[1], System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+
+                return;
+            }
+
+            DialogResult = DialogResult.OK;
         }
     }
 }

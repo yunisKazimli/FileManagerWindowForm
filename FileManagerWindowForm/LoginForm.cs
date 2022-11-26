@@ -22,16 +22,27 @@ namespace FileManagerWindowForm
 
         private async void SignInSinpleButton_Click(object sender, EventArgs e)
         {
-            if (!LoginFormStaticHandler.CheckForSignIn()) return;
+            string token = "";
 
-            string token = await LoginFormStaticHandler.ValidateSignIn();
+            Hide();
 
-            if (token == "") return;
+            try
+            {
+                LoginFormStaticHandler.CheckForSignIn();
+
+                token = await LoginFormStaticHandler.ValidateSignIn();
+            }
+            catch(Exception exc)
+            {
+                XtraMessageBox.Show(exc.Message.Split('/')[0], exc.Message.Split('/').Length == 1 ? "Unexpected error" : exc.Message.Split('/')[1], System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+
+                Show();
+
+                return;
+            }
 
             AuthorizationManager.token = token;
             AuthorizationManager.gmail = GmailTextEdit.Text;
-
-            Hide();
 
             (new MainMenuForm()).Show();
         }

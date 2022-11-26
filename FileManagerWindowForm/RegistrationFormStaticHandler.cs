@@ -1,4 +1,5 @@
 ﻿using DevExpress.XtraEditors;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,59 +20,22 @@ namespace FileManagerWindowForm
             passwordTextEdit = _passwordTextEdit;
         }
 
-        public static bool CheckForSignUp()
+        public static void CheckForSignUp()
         {
             if (gmailTextEdit.Text == "" || passwordTextEdit.Text == "")
             {
-                XtraMessageBox.Show("Fill the fields", "Wrong filling", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return false;
+                throw new Exception("Fill the fields/Wrong filling");
             }
-
-            return true;
         }
 
-        public static async Task<string> ValidateSignUp()
+        public static async Task ValidateSignUp()
         {
-            HttpClient httpClient = HttpClientFactory.Create();
-
             UrlParameterContainer parameters = new UrlParameterContainer();
 
             parameters.AddParameter("Gmail", gmailTextEdit.Text, false);
             parameters.AddParameter("Password", passwordTextEdit.Text, false);
 
-            string url = HttpGenerator.GenerateHttp("SignUp", parameters);
-
-            try
-            {
-                await httpClient.GetStringAsync(url);
-            }
-            catch (Exception e)
-            {
-                XtraMessageBox.Show(e.Message, "Registration error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return "";
-            }
-
-            return "Success";
-
-            /*HttpClient httpClient = HttpClientFactory.Create();
-
-            object[] url = HttpGenerator.GenerateSignUpHttp(gmailTextEdit.Text, passwordTextEdit.Text);
-
-            try
-            {
-                await httpClient.PostAsync(url[0] as string, url[1] as HttpContent);
-            }
-            catch (Exception e)
-            {
-                XtraMessageBox.Show(e.Message, "Registration error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                return "";
-            }
-
-            return "Success";
-            */
+            await HttpGenerator.GenerateVoidHttp("SignUp", parameters);
         }
     }
 }

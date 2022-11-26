@@ -32,13 +32,19 @@ namespace FileManagerWindowForm
 
         private async void AddSimpleButton_Click(object sender, EventArgs e)
         {
-            bool result;
+            try
+            {
+                AddFileFormStaticHandler.CheckFileTexEdit();
+                await AddFileFormStaticHandler.AddFile();
+            }
+            catch(Exception exc)
+            {
+                XtraMessageBox.Show(exc.Message.Split('/')[0], exc.Message.Split('/').Length == 1 ? "Unexpected error" : exc.Message.Split('/')[1], System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
 
-            if (!AddFileFormStaticHandler.CheckFileTexEdit()) return;
+                return;
+            }
 
-            result = await AddFileFormStaticHandler.AddFile();
-
-            if (result) DialogResult = DialogResult.OK;
+            DialogResult = DialogResult.OK;
         }
     }
 }

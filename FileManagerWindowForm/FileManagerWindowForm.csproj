@@ -179,6 +179,7 @@
     </Compile>
     <Compile Include="DownloadFileFormStaticHandler.cs" />
     <Compile Include="HttpGenerator.cs" />
+    <Compile Include="HttpResponseContainer.cs" />
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
