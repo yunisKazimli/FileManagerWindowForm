@@ -31,7 +31,7 @@ namespace FileManagerWindowForm
             parameters.AddParameter("fileName", fileNameComboBoxEdit.Text.Split('\\')[1], false);
             parameters.AddParameter("destPath", directoryPathtextEdit.Text, false);
 
-            await HttpGenerator .GenerateVoidHttp("DownloadFile", parameters);
+            await HttpGenerator.GenerateVoidHttp("DownloadFile", parameters);
         }
 
         public static void CheckFileTexEdit()

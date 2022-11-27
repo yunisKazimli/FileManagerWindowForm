@@ -918,14 +918,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="FileManagerWindowForm.exe" size="80352">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="FileManagerWindowForm.exe" size="84960">
       <assemblyIdentity name="FileManagerWindowForm" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>nx0LWj+8t6Fk9TlCWDkIMPMDPT9PuQDbjUA+OeOaEU4=</dsig:DigestValue>
+        <dsig:DigestValue>E0gyTfThUhcWC8wBczBjf8WtMAkfL1uz+a97NKIfjm8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

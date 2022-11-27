@@ -24,6 +24,7 @@ namespace FileManagerWindowForm
         {
             UrlParameterContainer parameters = new UrlParameterContainer();
 
+            parameters.AddParameter("fromGmail", fileNameComboBoxEdit.Text.Split('\\')[0], false);
             parameters.AddParameter("fileName", fileNameComboBoxEdit.Text.Split('\\')[1], false);
             parameters.AddParameter("isPersonal", fileNameComboBoxEdit.Text.Split('\\')[0] == AuthorizationManager.gmail ? "true" : "false", false);
 
